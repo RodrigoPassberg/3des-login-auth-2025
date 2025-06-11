@@ -2,6 +2,7 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const path = require('path');
 
 const app = express();
 const PORT = 3000;
@@ -9,6 +10,9 @@ const SECRET_KEY = 'supersecretjwtkey';
 
 app.use(cors());
 app.use(bodyParser.json());
+
+// Servir arquivos estáticos (HTML, CSS, JS) da pasta atual
+app.use(express.static(path.join(__dirname)));
 
 const users = [
     { id: 1, email: 'user@example.com', password: 'password123', name: 'Fulano da Silva' }
@@ -49,8 +53,13 @@ app.get('/posts', authenticateToken, (req, res) => {
     res.json(posts);
 });
 
-app.listen(PORT, () => {
-    console.log(`Servidor rodando na porta ${PORT}`);
+// Rota para servir a página de login como página inicial
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'login.html'));
 });
 
+app.listen(PORT, () => {
+    console.log(`Servidor rodando na porta ${PORT}`);
+    console.log(`Acesse: http://localhost:${PORT}`);
+});
 
