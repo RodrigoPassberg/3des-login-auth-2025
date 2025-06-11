@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,31 +12,36 @@
             padding: 0;
             background-color: #f0f2f5;
         }
+
         .header {
             background-color: #007bff;
             color: white;
             padding: 20px;
             text-align: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
         }
+
         .welcome-message {
             background-color: white;
             padding: 20px;
             border-radius: 8px;
             margin-bottom: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
+
         .posts-section {
             background-color: white;
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
+
         .post {
             border: 1px solid #e0e0e0;
             border-radius: 8px;
@@ -43,15 +49,18 @@
             margin-bottom: 20px;
             background-color: #fafafa;
         }
+
         .post h3 {
             margin-top: 0;
             color: #333;
         }
+
         .post-meta {
             color: #666;
             font-size: 14px;
             margin-bottom: 10px;
         }
+
         .post-stats {
             display: flex;
             gap: 20px;
@@ -59,6 +68,7 @@
             color: #007bff;
             font-size: 14px;
         }
+
         .logout-btn {
             background-color: #dc3545;
             color: white;
@@ -69,14 +79,17 @@
             float: right;
             margin-top: -10px;
         }
+
         .logout-btn:hover {
             background-color: #c82333;
         }
+
         .loading {
             text-align: center;
             padding: 20px;
             color: #666;
         }
+
         .error {
             background-color: #f8d7da;
             color: #721c24;
@@ -86,6 +99,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="header">
         <h1>Dashboard</h1>
@@ -107,13 +121,11 @@
     </div>
 
     <script>
-        // Verificar se o usuário está logado
         const token = localStorage.getItem('token');
         if (!token) {
             window.location.href = 'login.html';
         }
 
-        // Função para carregar posts
         async function loadPosts() {
             try {
                 const response = await fetch('http://localhost:3000/posts', {
@@ -128,7 +140,6 @@
                     const posts = await response.json();
                     displayPosts(posts);
                 } else if (response.status === 401 || response.status === 403) {
-                    // Token inválido ou expirado
                     localStorage.removeItem('token');
                     window.location.href = 'login.html';
                 } else {
@@ -136,15 +147,14 @@
                 }
             } catch (error) {
                 console.error('Erro:', error);
-                document.getElementById('postsContainer').innerHTML = 
+                document.getElementById('postsContainer').innerHTML =
                     '<div class="error">Erro ao carregar posts. Verifique se o servidor está rodando.</div>';
             }
         }
 
-        // Função para exibir posts
         function displayPosts(posts) {
             const container = document.getElementById('postsContainer');
-            
+
             if (posts.length === 0) {
                 container.innerHTML = '<p>Nenhum post encontrado.</p>';
                 return;
@@ -165,21 +175,18 @@
             container.innerHTML = postsHTML;
         }
 
-        // Função para formatar data
         function formatDate(dateString) {
             const date = new Date(dateString);
             return date.toLocaleDateString('pt-BR');
         }
 
-        // Função de logout
         function logout() {
             localStorage.removeItem('token');
             window.location.href = 'login.html';
         }
 
-        // Carregar posts quando a página carregar
         window.addEventListener('load', loadPosts);
     </script>
 </body>
-</html>
 
+</html>

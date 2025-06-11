@@ -6,12 +6,11 @@ const path = require('path');
 
 const app = express();
 const PORT = 3000;
-const SECRET_KEY = 'supersecretjwtkey'; 
+const SECRET_KEY = 'supersecretjwtkey';
 
 app.use(cors());
 app.use(bodyParser.json());
 
-// Servir arquivos estáticos (HTML, CSS, JS) da pasta atual
 app.use(express.static(path.join(__dirname)));
 
 const users = [
@@ -40,7 +39,7 @@ const authenticateToken = (req, res, next) => {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
 
-    if (!token) return res.sendStatus(401); 
+    if (!token) return res.sendStatus(401);
 
     jwt.verify(token, SECRET_KEY, (err, user) => {
         if (err) return res.sendStatus(403);
@@ -48,12 +47,11 @@ const authenticateToken = (req, res, next) => {
         next();
     });
 };
-    
+
 app.get('/posts', authenticateToken, (req, res) => {
     res.json(posts);
 });
 
-// Rota para servir a página de login como página inicial
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'login.html'));
 });
